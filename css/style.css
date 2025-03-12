@@ -1,0 +1,164 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: rgb(70, 70, 80);
+	font-family: "Consolas";
+}
+
+main {
+	min-height: 92vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.mainContainer,
+form {
+	width: 50%;
+	text-align: center;
+}
+
+.questionStyle {
+	display: grid;
+	margin: 35px 0;
+	width: 100%;
+	color: #fff;
+}
+
+.questionStyle :first {
+	margin-top: 200px;
+}
+
+.questionStyle p {
+	background-color: rgb(44, 44, 44);
+	text-align: left;
+	padding: 13px;
+}
+
+.questionStyle label {
+	background-color: rgb(55, 55, 55);
+	padding: 13px;
+	transition-duration: 0.4s;
+}
+
+h1 {
+	color: white;
+	font-size: 80px;
+	margin-bottom: 30px;
+}
+
+header {
+	text-align: center;
+	height: 80px;
+	position: relative;
+	background-color: rgb(44, 44, 44);
+}
+
+h2 {
+	position: absolute;
+	color: white;
+	font-size: 36px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+a {
+	text-decoration: none;
+	color: black;
+	height: 100%;
+	width: 100%;
+}
+
+a:hover {
+	color: white;
+}
+
+.submitButton {
+	padding: 10px;
+	margin: 30px;
+	font-size: 18px;
+	border: 1px solid black;
+	transition-duration: 1s;
+	background-color: lightgray;
+}
+
+.submitButton:hover,
+button:hover,
+.questionStyle label:hover {
+	background-color: lightskyblue;
+	color: white;
+	cursor: pointer;
+	transition-duration: 0.4s;
+}
+
+.scoreContainer {
+	text-align: center;
+	height: 100%;
+	width: 50%;
+}
+
+.score {
+	color: #fff;
+	font-size: 80px;
+	width: 100%;
+}
+
+.scoreText {
+	font-size: 20px;
+	margin: 30px;
+	color: rgb(231, 231, 231);
+}
+
+@media (min-width: 1750px) {
+	.mainContainer,
+	form {
+		width: 40%;
+	}
+}
+
+footer {
+	align-items: center;
+	background-color: rgb(44, 44, 44);
+	color: #fff;
+	display: flex;
+	position: absolute;
+	height: 5vh;
+	width: 100%;
+	margin-top: 3vh;
+}
+
+.footerLeft {
+	margin: 10px;
+}
+
+.footerRight {
+	position: absolute;
+	right: 0;
+	margin: 10px;
+}
+
+.footerLeft a {
+	color: #fff;
+}
+
+.footerLeft a:hover {
+	color: lightskyblue;
+}
+
+.mainContainer .questionStyle label {
+	pointer-events: none;
+}
+
+form .questionStyle .correctAnswer {
+	display: none;
+}
+
+.mainContainer .questionStyle .correctAnswer {
+	display: block;
+}

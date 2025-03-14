@@ -7,37 +7,52 @@
     <title>Quiz</title>
 </head>
 <body>
-    <form action="userForm.php" method="post">
-        <h1>Witaj w quizie!</h1>
-        <label for="name">Imię: </label>
-        <input type="text" name="name" id="name" required><br>
-        <label for="surname">Litera nazwiska: </label>
-        <input type="text" name="surname" id="surname" required><br>
-        <label for="szkola">Nazwa Szkoły: </label>
-        <input type="text" name="school" id="school">
-        <input type="submit" value="Rozpocznij quiz">
-        <script>
-            nameInput = document.getElementById("name");
-            surnameInput = document.getElementById("surname");
-            scoolInput = document.getElementById("school");
-            function validateForm() {
-                if (nameInput.value.length < 3) {
-                    alert("Imię musi składać się z przynajmniej 3 znaków!");
-                    return false;
-                }
-                if (surnameInput.value.length < 1) {
-                    alert("Podaj literę swojego nazwiska!");
-                    return false;
-                }
-                return true;
-            }
+    <main>
+        <form action="userForm.php" class="userForm" method="post">   
+            <h1>Witaj w quizie!</h1>
+            <label for="name">Imię: </label>
+            <input type="text" name="name" id="name"><br>
+            <label for="surname">Litera nazwiska: </label>
+            <input type="text" name="surname" id="surname"><br>
+            <label for="szkola">Nazwa Szkoły: </label>
+            <input type="text" name="school" id="school"> <br>
+            <input type="submit" name="submit" value="Rozpocznij quiz">
+        </form>
+            <?php
+                ini_set('display_errors', 0); // Prevents potential errors from displaying
 
-            if(validateForm()) {
-                <?php
-                    header("Location: quiz.php");
-                ?>
-            }
-        </script>
-    </form>
+                if(isSet($_POST['submit'])) {
+                    // Loads data from userForm
+                    $nameInput = str_replace(" ", "", $_POST['name']);
+                    $surnameInput = str_replace(" ", "",  $_POST['surname'] );         
+                    $schoolInput = str_replace(" ", "",  $_POST['school'] );
+
+                    // Simple else-if checking if input data is in correct format. 
+                    if (!preg_match("/[A-ZĄĘŁŃÓŚŹŻ]{1}[a-ząćęłńóśźż]{2,}/", $nameInput)) {
+                        echo"<script>alert('Imię musi składać się z przynajmniej 3 znaków oraz aczynać od wielkiej litery!')</script>";
+                    } else if (!preg_match("/[A-ZĄĘŁŃÓŚŹŻ]{1}/", $surnameInput)) {
+                        echo"<script>alert('Podaj pierwszą (wielką) literę swojego nazwiska!')</script>";
+                    } else if (strlen($schoolInput) < 3) {
+                        echo"<script>alert('Podaj poprawnie nazwę swojej szkoły!')</script>";
+                    } else {
+
+                        /**
+                         * TODO: MySQL database requests
+                        */
+                        
+                        // Heading to quiz.php file and closing form
+                        header("Location: ./quiz.php");
+                        exit;
+                    }
+                } 
+            ?>
+    </main>
+    <footer>
+    <p class="footerLeft">
+      Copyright© 2024
+      <a href="https://cksulechow.pl/" target="_blank">CKZiU Sulechow</a>
+    </p>
+    <span class="footerRight">Szymon Urbański 3TA</span>
+  </footer>
 </body>
 </html>

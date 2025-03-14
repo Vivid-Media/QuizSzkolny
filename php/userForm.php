@@ -7,37 +7,35 @@
     <title>Quiz</title>
 </head>
 <body>
-    <form action="userForm.php" method="post">
+    <form method="post">
         <h1>Witaj w quizie!</h1>
         <label for="name">Imię: </label>
-        <input type="text" name="name" id="name" required><br>
+        <input type="text" name="name" id="name" ><br>
         <label for="surname">Litera nazwiska: </label>
-        <input type="text" name="surname" id="surname" required><br>
+        <input type="text" name="surname" id="surname" ><br>
         <label for="szkola">Nazwa Szkoły: </label>
         <input type="text" name="school" id="school">
-        <input type="submit" value="Rozpocznij quiz">
-        <script>
-            nameInput = document.getElementById("name");
-            surnameInput = document.getElementById("surname");
-            scoolInput = document.getElementById("school");
-            function validateForm() {
-                if (nameInput.value.length < 3) {
-                    alert("Imię musi składać się z przynajmniej 3 znaków!");
-                    return false;
-                }
-                if (surnameInput.value.length < 1) {
-                    alert("Podaj literę swojego nazwiska!");
-                    return false;
-                }
-                return true;
-            }
-
-            if(validateForm()) {
-                <?php
-                    header("Location: quiz.php");
-                ?>
-            }
-        </script>
+        <input type="submit" name="ok" id="ok" value="Rozpocznij quiz">
     </form>
+
+    <?php 
+    if(isset($_POST['ok'])){
+        $imie = $_POST["name"];
+        $nazwisko = $_POST["surname"];
+
+        if (strlen($imie)>3) {
+            echo "blad";
+            header("Location: ./quiz.php");
+        }
+        else{
+            echo "blad";
+        }
+    }
+
+
+
+
+
+?>
 </body>
 </html>

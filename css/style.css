@@ -5,6 +5,7 @@
 }
 
 body {
+	height: 100%;
 	background-color: rgb(255, 255, 255);
 	font-family: "Consolas";
 }
@@ -161,4 +162,85 @@ form .questionStyle .correctAnswer {
 
 .mainContainer .questionStyle .correctAnswer {
 	display: block;
+}
+
+.mainsection{
+	margin-top: 5%;
+    width: 100%; 
+	height: 100%;
+    display: flex; /* wyśrodkowanie elementów w formularzu */
+    flex-direction: column; 
+    justify-content: center; /* wyśrodkowanie zawartości */
+    align-items: center; /* wyśrodkowanie zawartości */
+    min-height: 200px; 
+}
+
+/* sekcja logowania */
+.logowanie {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid rgb(109, 107, 107);
+    width: 100%; 
+    max-width: 660px; 
+    text-align: center;
+    display: flex; /* wyśrodkowanie elementów w formularzu */
+    flex-direction: column; 
+    justify-content: center; /* wyśrodkowanie zawartości */
+    align-items: center; /* wyśrodkowanie zawartości */
+    min-height: 400px; 
+}
+
+
+
+
+.logowanie label {
+    font-size: 16px;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+/* style dla input */
+.logowanie input {
+	transition: background-color 2.2s ease;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+
+
+#ok{
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 2.5s ease;
+}
+
+/* kolor przycisku na hover */
+.logowanie input:hover {
+	transition: background-color 2.2s ease;
+    background-color: #99c99b;
+}
+#ok:hover{
+	background-color: #333;
+
+}
+
+#blad {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: red;
+    margin: 15px;
+    font-size: 20px;
 }

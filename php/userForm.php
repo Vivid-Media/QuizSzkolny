@@ -23,8 +23,7 @@
         $imie = $_POST["name"];
         $nazwisko = $_POST["surname"];
 
-        if (strlen($imie)>3) {
-            echo "blad";
+        if (strlen($imie)>3 && strlen($nazwisko) == 1) {
             header("Location: ./quiz.php");
         }
         else{

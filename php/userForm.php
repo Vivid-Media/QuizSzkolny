@@ -26,11 +26,11 @@
 
                 $imie = $_POST["imie"];
                 //usuwam spacje z imienia
-                $imieBezSpacji = str_replace(" ", "", $imie);
+                $imieBezSpacji = str_replace([" "], "", $imie);
 
                 $nazwisko = $_POST["nazwisko"];
                 //usuwam spacje z nazwiska
-                $nazwiskoBezSpacji = str_replace(" ", "", $nazwisko);
+                $nazwiskoBezSpacji = str_replace([" "], "", $nazwisko);
 
                 $szkola = $_POST["szkola"];
 

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 12, 2025 at 02:55 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Generation Time: Mar 15, 2025 at 04:28 PM
+-- Wersja serwera: 10.4.28-MariaDB
+-- Wersja PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `answers`
+-- Struktura tabeli dla tabeli `answers`
 --
 
 CREATE TABLE `answers` (
@@ -36,7 +36,7 @@ CREATE TABLE `answers` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `questions`
+-- Struktura tabeli dla tabeli `questions`
 --
 
 CREATE TABLE `questions` (
@@ -44,10 +44,18 @@ CREATE TABLE `questions` (
   `question` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`id`, `question`) VALUES
+(1, 'przyklad'),
+(2, 'pytanie 2');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `results`
+-- Struktura tabeli dla tabeli `results`
 --
 
 CREATE TABLE `results` (
@@ -59,7 +67,7 @@ CREATE TABLE `results` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktura tabeli dla tabeli `user`
 --
 
 CREATE TABLE `user` (
@@ -70,29 +78,29 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 --
--- Indexes for dumped tables
+-- Indeksy dla zrzutów tabel
 --
 
 --
--- Indexes for table `answers`
+-- Indeksy dla tabeli `answers`
 --
 ALTER TABLE `answers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `questions`
+-- Indeksy dla tabeli `questions`
 --
 ALTER TABLE `questions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `results`
+-- Indeksy dla tabeli `results`
 --
 ALTER TABLE `results`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user`
+-- Indeksy dla tabeli `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
@@ -111,7 +119,7 @@ ALTER TABLE `answers`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `results`

@@ -16,6 +16,11 @@
 <main>
 
 <?php
+
+
+
+
+
   include './questions.php';
   include_once './randNumbers.php';
 
@@ -24,11 +29,27 @@
     //This if statement checks if quiz has been finnsihed or not
     if(!isSet($_POST['submit'])) {  
       //If not, then it displays quiz form
+      
       echo "<form action='./quiz.php' method='post'> ";
+      echo "<p>wyniki</p>";
       foreach ($random_numbers as $number => $number_of_question) {
-          echo "<section class='questionStyle'>";
-          echo $questions[$number_of_question];
-          echo "</section>";
+//polaczenie z bazą
+$conn = new mysqli("localhost", "root", null, "quiz");
+
+
+// zapytanie sql - pobiera wszystkie pytania z tabeli questions
+$sql = "SELECT id, question FROM questions";
+$result = $conn->query($sql);
+
+if ($result) {
+    while($row = $result->fetch_assoc()) {
+      echo "<section class='questionStyle'>";
+        echo "<p>" . $row["id"] . " - " . $row["question"] . "</p>";
+        echo "<label><input type='radio' name='question[37]' value='A'> A. Example </label> ";
+        echo "</p></section>";
+      }
+}
+$conn->close();
       }
         echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
     } else { //If yes, then it displays score, congratulations message and questions that weren't answered correctly
@@ -65,7 +86,7 @@
       }
         
       //Displaying a button taking user back to index.html
-      echo "<a href='../html/index.html' class='submitButton'>Wróć do strony początkowej</a>";
+      echo "<a href='../index.html' class='submitButton'>Wróć do strony początkowej</a>";
       echo"</section>";
     }
 ?>

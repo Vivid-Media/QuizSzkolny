@@ -65,7 +65,7 @@
       }
         
       //Displaying a button taking user back to index.html
-      echo "<a href='../html/index.html' class='submitButton'>Wróć do strony początkowej</a>";
+      echo "<a href='../index.html' class='submitButton'>Wróć do strony początkowej</a>";
       echo"</section>";
     }
 ?>

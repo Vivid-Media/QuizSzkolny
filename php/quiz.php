@@ -32,25 +32,34 @@
       
       echo "<form action='./quiz.php' method='post'> ";
       echo "<p>wyniki</p>";
-      foreach ($random_numbers as $number => $number_of_question) {
-//polaczenie z bazą
-$conn = new mysqli("localhost", "root", null, "quiz");
+      //polaczenie z bazą
+      $conn = new mysqli("localhost", "root", null, "quiz");
 
-
-// zapytanie sql - pobiera wszystkie pytania z tabeli questions
-$sql = "SELECT id, question FROM questions";
-$result = $conn->query($sql);
-
-if ($result) {
-    while($row = $result->fetch_assoc()) {
-      echo "<section class='questionStyle'>";
-        echo "<p>" . $row["id"] . " - " . $row["question"] . "</p>";
-        echo "<label><input type='radio' name='question[37]' value='A'> A. Example </label> ";
-        echo "</p></section>";
-      }
-}
-$conn->close();
-      }
+      // zapytanie sql - pobiera wszystkie pytania z tabeli questions
+      $sql = "SELECT id, question FROM questions";
+      $result = $conn->query($sql);
+      $questions_to_display = array();
+      if ($result) {
+        while($row = $result->fetch_assoc()) {
+          array_push($questions_to_display, '"<p>" . '.$row['id'].' . " - " . '.$row['question'].' . "</p>"');
+          /*
+          echo "<section class='questionStyle'>";
+          echo "<p>" . $row["id"] . " - " . $row["question"] . "</p>";
+          echo "<label><input type='radio' name='question[37]' value='A'> A. Example </label> ";
+          echo "</p></section>";
+          */
+        }
+        foreach ($random_numbers as $number => $number_of_question) {
+          echo "<section class='questionStyle'>";
+          echo $questions_to_display[$number_of_question];
+          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
+          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
+          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
+          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
+          echo "</section>";
+        }
+      $conn->close();
+    }
         echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
     } else { //If yes, then it displays score, congratulations message and questions that weren't answered correctly
       $num_of_answers = 0; //Amount of correct answers

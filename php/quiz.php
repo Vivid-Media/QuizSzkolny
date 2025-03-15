@@ -45,6 +45,7 @@ if ($result) {
     while($row = $result->fetch_assoc()) {
       echo "<section class='questionStyle'>";
         echo "<p>" . $row["id"] . " - " . $row["question"] . "</p>";
+        echo "<label><input type='radio' name='question[37]' value='A'> A. Example </label> ";
         echo "</p></section>";
       }
 }

@@ -7,7 +7,7 @@
     <title>Quiz</title>
 </head>
 <body>
-<<<<<<< HEAD
+
 <!--
     <main>
         <form action="userForm.php" class="userForm" method="post">   
@@ -56,7 +56,7 @@
     </p>
     <span class="footerRight">Szymon Urbański 3TA</span>
   </footer>-->
-=======
+
 <header>
         <h2>Witaj w quizie!</h2>
 </header>
@@ -113,6 +113,6 @@
     </form>
     </section>
     </section>
->>>>>>> fe8a4afc1201fe7caceb9b0f38d1370af7915be6
+
 </body>
 </html>

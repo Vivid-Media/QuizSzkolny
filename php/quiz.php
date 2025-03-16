@@ -116,8 +116,36 @@
 else{
   $wrong_answers .= "<p>Błąd: Brak danych z formularza.</p>";
 }   
+      // Calculate score percentage
+      $total_questions = count($questions);
+      $score_percentage = ($num_of_answers / $total_questions) * 100;
+
+      // Insert user score into the database
+      $conn = new mysqli("localhost", "root", "", "quiz");
+
+      // Check connection
+      if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+      }
+
+      // Assuming user_id is stored in session or passed as a hidden input
+      $user_id = $_SESSION['user_id'] ?? 1; // Replace with actual user ID retrieval logic
+
+      // Prepare and bind
+      $stmt = $conn->prepare("INSERT INTO results (user_id, userScore) VALUES (?, ?)");
+      $stmt->bind_param("ii", $user_id, $score_percentage);
+
+      // Execute the statement
+      if (!$stmt->execute()) {
+          echo "Błąd podczas zapisywania wyniku: " . $stmt->error;
+      }
+
+      // Close the statement and connection
+      $stmt->close();
+      $conn->close();
+
       echo "<section class='mainContainer'>";
-      echo "<p class='score'>" . ($num_of_answers) ."%</p>";
+      echo "<p class='score'>" . (round($score_percentage)) ."%</p>";
         
       if($num_of_answers <= 30) { //Displaying appropriate congraatulations message
         echo "<p class='scoreText'>Niestety, ale nie poszło ci zbyt dobrze. Musisz się jeszcze dużo nauczyć, jeśli planujesz podjąć się pracy programisty.</p>";
@@ -128,6 +156,8 @@ else{
       } elseif($num_of_answers > 90 && $num_of_answers <= 100) {
         echo "<p class='scoreText'>Gratulacje! Poszło ci praktycznie bezbłędnie. Znaczy to, że teorię masz w zasadzie w małym palcu. Brawo i oby tak dalej!</p>";
       }
+
+      
 
       //Displaying all the incorrect answers. Of course if there were any
       if($wrong_answers != "") { 

@@ -91,7 +91,28 @@
             } elseif (strlen($nazwiskoBezSpacji) != 1) {
                 $blad = "Podaj pierwszą litere nazwiska.";
             } else {
-                header("Location: ./quiz.php");
+                // Połączenie z bazą danych
+                $conn = new mysqli("localhost", "root", "", "quiz");
+
+                // Sprawdzenie połączenia
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Przygotowane zapytanie SQL
+                $stmt = $conn->prepare("INSERT INTO user (imie, literaNazwiska, szkola) VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", $imieBezSpacji, $nazwiskoBezSpacji, $szkola);
+
+                // Wykonanie zapytania
+                if ($stmt->execute()) {
+                    header("Location: ./quiz.php");
+                } else {
+                    $blad = "Błąd podczas dodawania użytkownika: " . $stmt->error;
+                }
+
+                // Zamykanie funkcji oraz $conn
+                $stmt->close();
+                $conn->close();
             }
         }
         ?>
@@ -116,3 +137,4 @@
 
 </body>
 </html>
+

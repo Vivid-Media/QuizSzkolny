@@ -134,7 +134,13 @@
     </form>
     </section>
     </section>
-
+    <footer>
+			<p class="footerLeft">
+				Copyright© 2024
+				<a href="https://cksulechow.pl/" target="_blank">CKZiU Sulechow</a>
+			</p>
+			<span class="footerRight">&copy; Vivid Media 2025</span>
+		</footer>
 </body>
 </html>
 

@@ -16,67 +16,108 @@
 <main>
 
 <?php
-
-
-
-
-
   include './questions.php';
   include_once './randNumbers.php';
 
     ini_set('display_errors', 0); // Prevents potential errors from displaying
     
-    //This if statement checks if quiz has been finnsihed or not
-    if(!isSet($_POST['submit'])) {  
-      //If not, then it displays quiz form
-      
-      echo "<form action='./quiz.php' method='post'> ";
-      echo "<p>wyniki</p>";
       //polaczenie z bazą
       $conn = new mysqli("localhost", "root", null, "quiz");
 
       // zapytanie sql - pobiera wszystkie pytania z tabeli questions
-      $sql = "SELECT id, question FROM questions";
+      $sql = "SELECT q.id, q.question, a.answer_a, a.answer_b, a.answer_c, a.answer_d, a.correct_answer 
+        FROM questions q 
+        JOIN answers a ON q.id = a.question_id";
       $result = $conn->query($sql);
-      $questions_to_display = array();
+      $questions = array();  //inicjalizacja tablicy
+
       if ($result) {
         while($row = $result->fetch_assoc()) {
-          array_push($questions_to_display, '"<p>" . '.$row['id'].' . " - " . '.$row['question'].' . "</p>"');
-          /*
-          echo "<section class='questionStyle'>";
-          echo "<p>" . $row["id"] . " - " . $row["question"] . "</p>";
-          echo "<label><input type='radio' name='question[37]' value='A'> A. Example </label> ";
-          echo "</p></section>";
-          */
+          $question_id = $row['id'];
+        $question_text = $row['question'];
+        $answers = [
+            'A' => $row['answer_a'],
+            'B' => $row['answer_b'],
+            'C' => $row['answer_c'],
+            'D' => $row['answer_d']
+        ];
+        $correct_answer = $row['correct_answer'];
+
+        // Wypełnij tablicę $questions
+        $questions[$question_id] = [
+            'question_text' => $question_text,
+            'answers' => $answers,
+            'correct_answer' => $correct_answer
+        ];
         }
-        foreach ($random_numbers as $number => $number_of_question) {
-          echo "<section class='questionStyle'>";
-          echo $questions_to_display[$number_of_question];
-          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
-          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
-          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
-          echo "<label><input type='radio' name='question[".$number_of_question."]' value='A'> A. Example </label> ";
-          echo "</section>";
+    }
+    $conn->close();
+    // sprawdz czy quiz skończony
+    if (!isset($_POST['submit'])) {
+      //jesli nie wyswietl formularz
+      echo "<form action='./quiz.php' method='post'>";
+      
+      //display questions
+      foreach ($questions as $question_id => $question_data) {
+        echo "<section class='questionStyle'> <p> $question_id - " . $question_data['question_text'] . "</p>";
+        foreach ($question_data['answers'] as $key => $answer_text) {
+            echo "<label><input type='radio' name='question[$question_id]' value='$key'> $key. $answer_text</label>";
         }
-      $conn->close();
+        echo "</section>";
     }
         echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
     } else { //If yes, then it displays score, congratulations message and questions that weren't answered correctly
       $num_of_answers = 0; //Amount of correct answers
       $wrong_answers = ""; //String, in which all wrongly answered questions are stored
       
-      //This loop checks answer for every single question. If it's incorrect, then question is added to the $wrong_answers string, which is displayed after the end of the quiz
-      foreach ($_POST['question'] as $question_key => $question_answer) {
-        if ($question_answer == 1) {
-          $num_of_answers++;
-        } elseif($question_answer != 1) {
-          $wrong_answers = $wrong_answers."<section class='questionStyle'>".$questions[$question_key-1]."<p class='correctAnswer'>Twoja odpowiedź: ".$question_answer."</p></section>";
-        }   
+
+      $conn = new mysqli("localhost", "root", null, "quiz");
+      $sql = "SELECT q.id, a.correct_answer 
+      FROM questions q 
+      JOIN answers a ON q.id = a.question_id";
+      $result = $conn->query($sql);
+      $correct_answers = array();
+      
+      if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $correct_answers[$row['id']] = $row['correct_answer'];
       }
-        
-      $num_of_answers = (int)(($num_of_answers * 100) / NUM_OF_QUESTIONS); //Calculating the score
+    }
+    $conn->close();
+    
+
+
+      //This loop checks answer for every single question. If it's incorrect, then question is added to the $wrong_answers string, which is displayed after the end of the quiz
+     if (isset($_POST['question'])) {
+      foreach ($_POST['question'] as $question_id => $question_answer) {
+        if ($question_answer == $correct_answers[$question_id]) {
+          $num_of_answers++;
+        } 
+        else{
+          if (isset($questions[$question_id])) {
+            $wrong_answers .= "<section class='questionStyle'>";
+            $wrong_answers .= "<p>" . $questions[$question_id]['question_text'] . "</p>";
+
+            foreach ($questions[$question_id]['answers'] as $key => $answer_text) {
+                $checked = ($key == $question_answer) ? "checked" : "";
+                $wrong_answers .= "<label><input type='radio' name='question[$question_id]' value='$key' $checked> $key. $answer_text</label>";
+            }
+
+            $correct_answer_letter = $correct_answers[$question_id];
+            $wrong_answers .= "<p class='correctAnswer'>Poprawna odpowiedź: " . $questions[$question_id]['answers'][$correct_answer_letter] . "</p>";
+
+            $wrong_answers .= "</section>";
+        } else {
+            $wrong_answers .= "<p>Błąd: Nie znaleziono pytania o ID $question_id.</p>";
+        }
+    }   
+  }
+}
+else{
+  $wrong_answers .= "<p>Błąd: Brak danych z formularza.</p>";
+}   
       echo "<section class='mainContainer'>";
-      echo "<p class='score'>".$num_of_answers."%</p>";
+      echo "<p class='score'>" . ($num_of_answers) ."%</p>";
         
       if($num_of_answers <= 30) { //Displaying appropriate congraatulations message
         echo "<p class='scoreText'>Niestety, ale nie poszło ci zbyt dobrze. Musisz się jeszcze dużo nauczyć, jeśli planujesz podjąć się pracy programisty.</p>";

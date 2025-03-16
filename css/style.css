@@ -105,7 +105,7 @@ button:hover,
 }
 
 .score {
-	color: #fff;
+	color: #c76b6b;
 	font-size: 80px;
 	width: 100%;
 }
@@ -113,7 +113,7 @@ button:hover,
 .scoreText {
 	font-size: 20px;
 	margin: 30px;
-	color: rgb(231, 231, 231);
+	color: rgb(197, 125, 125);
 }
 
 @media (min-width: 1750px) {

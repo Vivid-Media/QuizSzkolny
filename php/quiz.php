@@ -169,7 +169,7 @@ else{
       }
         
       //Displaying a button taking user back to index.html
-      echo "<a href='../index.html' class='submitButton'>Wróć do strony początkowej</a>";
+      echo "<a href='../index.html' id='powrotbutton' class='submitButton'>Wróć do strony początkowej</a>";
       echo"</section>";
     }
 ?>

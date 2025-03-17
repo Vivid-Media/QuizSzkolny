@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/userformstyle.css">
     <title>Quiz</title>
 </head>
 
 <body>
-    
+
 <header>
         <h2>Witaj w quizie!</h2>
 </header>
-<section class = "mainsection">
+<section class = "mainsectionform">
 <section class="logowanie">
     <form method="post" >
      

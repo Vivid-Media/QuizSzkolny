@@ -58,6 +58,10 @@
 
                 // Wykonanie zapytania
                 if ($stmt->execute()) {
+                    // Retrieve the last inserted user ID
+                    $user_id = $conn->insert_id;
+                    session_start();
+                    $_SESSION['user_id'] = $user_id;
                     header("Location: ./quiz.php");
                 } else {
                     $blad = "Błąd podczas dodawania użytkownika: " . $stmt->error;

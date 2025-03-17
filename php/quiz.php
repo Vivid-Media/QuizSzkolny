@@ -12,9 +12,6 @@
   if(!isSet($_POST['submit'])) {
     echo "<header><h2>Powodzenia!</h2></header>";
   } 
-  else{
-    echo "<header><h2>Koniec!</h2></header>";
-  }
 ?>
 <main>
 
@@ -69,9 +66,9 @@
         echo "</section>";
     }
         echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
-    } else { //If yes, then it displays score, congratulations message and questions that weren't answered correctly
-      $num_of_answers = 0; //Amount of correct answers
-      $wrong_answers = ""; //String, in which all wrongly answered questions are stored
+    } else {
+      $num_of_answers = 0; //Liczba prawidłowych odpowiedzi
+      $wrong_answers = ""; //złe odpowiedzi, przechowujemy w stringu
       
 
       $conn = new mysqli("localhost", "root", null, "quiz");
@@ -119,11 +116,10 @@
 else{
   $wrong_answers .= "<p>Błąd: Brak danych z formularza.</p>";
 }   
-      // Calculate score percentage
+      // Wylicz procenty
       $total_questions = count($questions);
       $score_percentage = ($num_of_answers / $total_questions) * 100;
 
-      // Insert user score into the database
       $conn = new mysqli("localhost", "root", "", "quiz");
 
       // Check connection
@@ -131,14 +127,15 @@ else{
           die("Connection failed: " . $conn->connect_error);
       }
 
-      // Assuming user_id is stored in session or passed as a hidden input
+      // Przechowywując user_id w userForm.php w sesji. Możena je teraz pobrać
+      session_start();
       $user_id = $_SESSION['user_id'] ?? 1; // Replace with actual user ID retrieval logic
 
-      // Prepare and bind
+      
       $stmt = $conn->prepare("INSERT INTO results (user_id, userScore) VALUES (?, ?)");
       $stmt->bind_param("ii", $user_id, $score_percentage);
 
-      // Execute the statement
+      // Wykonaj zapytanie
       if (!$stmt->execute()) {
           echo "Błąd podczas zapisywania wyniku: " . $stmt->error;
       }
@@ -148,15 +145,15 @@ else{
       $conn->close();
 
       echo "<section class='mainContainer'>";
-      echo "<p class='score'>" . (round($score_percentage)) ."%</p>";
+      echo "<p class='score'>" . (round(num: $score_percentage)) ."%</p>";
         
-      if($num_of_answers <= 30) { //Displaying appropriate congraatulations message
+      if($score_percentage <= 30) { //Displaying appropriate congraatulations message
         echo "<p class='scoreText'>Niestety, ale nie poszło ci zbyt dobrze. Musisz się jeszcze dużo nauczyć, jeśli planujesz podjąć się pracy programisty.</p>";
-      } elseif($num_of_answers > 30 && $num_of_answers <= 60) {
+      } elseif($score_percentage > 30 && $score_percentage <= 60) {
         echo "<p class='scoreText'>Nieźle, jednak czeka cię jeszcze sporo pracy jeśli chcesz opanować podstawy projektowania stron internetowych.</p>";
-      } elseif($num_of_answers > 60 && $num_of_answers <= 90) {
+      } elseif($score_percentage > 60 && $score_percentage <= 90) {
         echo "<p class='scoreText'>Świetnie ci poszło! Jeśli znasz praktykę równie dobrze jak teorię, nie musisz się zbytnio martwić o egzaminy zawodowe.</p>";
-      } elseif($num_of_answers > 90 && $num_of_answers <= 100) {
+      } elseif($score_percentage > 90 && $score_percentage <= 100) {
         echo "<p class='scoreText'>Gratulacje! Poszło ci praktycznie bezbłędnie. Znaczy to, że teorię masz w zasadzie w małym palcu. Brawo i oby tak dalej!</p>";
       }
 
@@ -169,7 +166,7 @@ else{
       }
         
       //Displaying a button taking user back to index.html
-      echo "<a href='../index.html' id='powrotbutton' class='submitButton'>Wróć do strony początkowej</a>";
+      echo "<a href='../index.html' class='submitButton'>Wróć do strony początkowej</a>";
       echo"</section>";
     }
 ?>

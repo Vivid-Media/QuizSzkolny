@@ -12,6 +12,9 @@
   if(!isSet($_POST['submit'])) {
     echo "<header><h2>Powodzenia!</h2></header>";
   } 
+  else{
+    echo "<header><h2>Koniec!</h2></header>";
+  }
 ?>
 <main>
 

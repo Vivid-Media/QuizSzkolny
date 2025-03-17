@@ -14,7 +14,7 @@ body {
 }
 
 main {
-	min-height: 92vh;
+	min-height: 95%;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -58,7 +58,7 @@ h1 {
 
 header {
 	text-align: center;
-	height: 8%;
+	height: 7%;
 	position: relative;
 	background-color: rgb(95, 147, 49);
 }
@@ -85,7 +85,7 @@ a:hover {
 
 .submitButton {
 	padding: 10px;
-	margin: 30px;
+	margin: 10px;
 	font-size: 18px;
 	border: 1px solid black;
 	transition-duration: 1s;
@@ -131,8 +131,8 @@ footer {
 	background-color: rgb(44, 44, 44);
 	color: #fff;
 	display: flex;
-	position: relative;
-	height: 5vh;
+	position: absolute;
+	height: 5%;
 	width: 100%;
 }
 
@@ -178,6 +178,7 @@ form .questionStyle .correctAnswer {
 /* sekcja logowania */
 .logowanie {
     background-color: #ffffff;
+
     border-radius: 8px;
     border: 1px solid rgb(109, 107, 107);
     width: 100%; 

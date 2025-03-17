@@ -58,14 +58,14 @@
       echo "<form action='./quiz.php' method='post'>";
       
       //display questions
-      foreach ($questions as $question_id => $question_data) {
-        echo "<section class='questionStyle'> <p> $question_id - " . $question_data['question_text'] . "</p>";
-        foreach ($question_data['answers'] as $key => $answer_text) {
-            echo "<label><input type='radio' name='question[$question_id]' value='$key'> $key. $answer_text</label>";
+      foreach ($random_numbers as $number_of_question) {
+        echo "<section class='questionStyle'> <p>" . $questions[$number_of_question]["question_text"] . "</p>";
+        foreach ($questions[$number_of_question]['answers'] as $key => $answer_text) {
+            echo "<label><input type='radio' name='question[$number_of_question]' value='$key'> $key. $answer_text</label>";
         }
         echo "</section>";
-    }
-        echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
+      }
+      echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
     } else {
       $num_of_answers = 0; //Liczba prawidłowych odpowiedzi
       $wrong_answers = ""; //złe odpowiedzi, przechowujemy w stringu
@@ -117,8 +117,7 @@ else{
   $wrong_answers .= "<p>Błąd: Brak danych z formularza.</p>";
 }   
       // Wylicz procenty
-      $total_questions = count($questions);
-      $score_percentage = ($num_of_answers / $total_questions) * 100;
+      $score_percentage = ($num_of_answers / NUM_OF_QUESTIONS) * 100;
 
       $conn = new mysqli("localhost", "root", "", "quiz");
 
@@ -172,11 +171,11 @@ else{
 ?>
 </main>
 <footer>
-    <p class="footerLeft">
-      Copyright© 2024
-      <a href="https://cksulechow.pl/" target="_blank">CKZiU Sulechow</a>
-    </p>
-    <span class="footerRight">Szymon Urbański 2TA</span>
-  </footer>
+			<p class="footerLeft">
+				Copyright© 2024
+				<a href="https://cksulechow.pl/" target="_blank">CKZiU Sulechow</a>
+			</p>
+			<span class="footerRight">&copy; Vivid Media 2025</span>
+		</footer>
 </body>
 </html>

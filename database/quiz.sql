@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 15, 2025 at 09:12 PM
+-- Generation Time: Mar 17, 2025 at 08:04 PM
 -- Wersja serwera: 10.4.28-MariaDB
 -- Wersja PHP: 8.2.4
 
@@ -75,7 +75,13 @@ INSERT INTO `answers` (`id`, `question_id`, `correct_answer`, `answer_a`, `answe
 (31, 31, 'D', 'Data Object Management', 'Digital Output Memory', 'Dynamic Operation Module', 'Document Object Model '),
 (32, 32, 'D', 'Java Syntax Object Name', 'Jumbled Symbolic Object Notation', 'Joint Script Output Network', 'JavaScript Object Notation'),
 (33, 33, 'B', 'Internet Data Exchange', 'Integrated Development Environment', 'Internal Device Emulator', 'Input Device Engine'),
-(34, 34, 'D', 'Simple Queue Logic', 'System Query Layout', 'Secure Quality Log', 'Structured Query Language');
+(34, 34, 'D', 'Simple Queue Logic', 'System Query Layout', 'Secure Quality Log', 'Structured Query Language'),
+(35, 35, 'C', 'Control Process Unit', 'Control Processing Unit', 'Central Processing Unit', 'Computer Processing Unit'),
+(36, 36, 'C', 'Przechowywanie danych', 'Obsługa przeglądarki internetowej', 'Zarządzanie zasobami komputera', 'Tworzenie stron internetowych'),
+(37, 37, 'B', '.txt', '.exe', '.jpg', '.bat'),
+(38, 38, 'D', 'Monitor', 'Drukarka', 'Klawiatura', 'Router'),
+(39, 39, 'A', 'Przechowywanie danych tymczasowo', 'Przechowywanie danych na stałe', 'Tworzenie kopii zapasowych', 'Łączenie z Internetem'),
+(40, 40, 'D', 'Dziesiętny', 'Heksadecymalny', 'Oktalny', 'Binarny');
 
 -- --------------------------------------------------------
 
@@ -126,7 +132,13 @@ INSERT INTO `questions` (`id`, `question`) VALUES
 (31, 'Co oznacza skrót DOM?'),
 (32, 'Co oznacza skrót JSON?'),
 (33, 'Co to jest IDE?'),
-(34, 'Co oznacza skrót SQL?');
+(34, 'Co oznacza skrót SQL?'),
+(35, 'Co oznacza skrót CPU?'),
+(36, 'Co jest podstawowym zadaniem systemu operacyjnego?'),
+(37, 'Jakie jest rozszerzenie pliku wykonalnego w systemie Windows?'),
+(38, 'Jakie urządzenie jest używane do bezprzewodowej komunikacji między komputerami w sieci lokalnej?'),
+(39, 'Jakie jest podstawowe zadanie pamięci RAM?'),
+(40, 'Jaki system liczbowy jest używany przez komputery do przetwarzania danych?');
 
 -- --------------------------------------------------------
 
@@ -189,25 +201,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `results`
 --
 ALTER TABLE `results`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

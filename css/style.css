@@ -1,10 +1,11 @@
-* {
+*,::after,::before {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
 html{
 	height: 100%;
+	font-size: 16px;
 }
 
 body {
@@ -29,8 +30,7 @@ form {
 
 .questionStyle {
 	display: grid;
-	margin: 35px 0;
-	width: 100%;
+	margin: 35px 0;	
 	color: #fff;
 }
 
@@ -48,12 +48,6 @@ form {
 	background-color: rgb(95, 91, 91);
 	padding: 13px;
 	transition-duration: 0.4s;
-}
-
-h1 {
-	color: rgb(63, 60, 60);
-	font-size: 80px;
-	margin-bottom: 30px;
 }
 
 header {
@@ -82,9 +76,22 @@ a {
 a:hover {
 	color: white;
 }
-
-.submitButton {
-
+.submitButton{
+	padding: 10px;
+	margin-bottom: 5px;
+	font-size: 18px;
+	border: 1px solid black;
+	transition-duration: 1s;
+	background-color: lightgray;
+}
+.buttonContainer{
+	height: 20%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20pt;
+}
+.submitTwoButton {
 	padding: 10px;
 	margin-bottom: 5px;
 	font-size: 18px;
@@ -131,27 +138,33 @@ button:hover,
 	.mainContainer,
 	form {
 		width: 40%;
+		height: 50%;
 	}
 }
-
+.mainContainer{
+	width: 85%;
+	height: 90%;
+}
 footer {
 	align-items: center;
 	background-color: rgb(44, 44, 44);
 	color: #fff;
 	display: flex;
-	position: absolute;
-	height: 5%;
+	align-content: space-between;
+	height:5%;
 	width: 100%;
+	padding: 0 10px; 
 }
 
 .footerLeft {
 	margin: 10px;
 }
 
-.footerRight {
-	position: relative;
-	right: 0;
+p.footerRight {
 	margin: 10px;
+	text-align: right; 
+	flex: 1; 
+	padding-right: 10px;
 }
 
 .footerLeft a {
@@ -223,9 +236,20 @@ form .questionStyle .correctAnswer {
 }
 
 #powrotbutton{
-	display: block;
+	display:block;
 	width: 50%;
 	margin: 5px auto;
+}
+@media (max-width: 447px) {
+	#powrotbutton{
+		font-size: 0.6rem;
+	}
+	#ok{
+		font-size: 0.9rem;
+	}
+	.submitButton{
+		font-size: 0.9rem;
+	}
 }
 
 #ok{

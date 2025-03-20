@@ -1,3 +1,8 @@
+<?php
+session_start();
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+?>
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -35,7 +40,15 @@
     ini_set('display_errors', 0); // Prevents potential errors from displaying
 
     //polaczenie z bazą
-    $conn = new mysqli("localhost", "root", null, "quiz");
+    $conn = new mysqli("mariadb1011.server457902.nazwa.pl:3306","server457902_quiz","root123!A","server457902_quiz");
+            
+            if ($conn->connect_error) {
+              die("Błąd połączenia z bazą danych: " . $conn->connect_error);
+            }
+            $conn->query("SET NAMES 'utf8mb4'");
+            $conn->query("SET CHARACTER SET utf8mb4");
+            $conn->query("SET COLLATION_CONNECTION = 'utf8mb4_unicode_ci'");
+
 
     // zapytanie sql - pobiera wszystkie pytania z tabeli questions
     $sql = "SELECT q.id, q.question, a.answer_a, a.answer_b, a.answer_c, a.answer_d, a.correct_answer 
@@ -65,121 +78,114 @@
       }
     }
     $conn->close();
-    // sprawdz czy quiz skończony
-    if (!isset($_POST['submit'])) {
-      //jesli nie wyswietl formularz
-      echo "<form action='./quiz.php' method='post'>";
+   // sprawdz czy quiz skończony
+if (!isset($_POST['submit'])) {
+  // Wyświetl formularz
+  echo "<form action='./quiz.php' method='post'>";
 
-      //display questions
-      foreach ($random_numbers as $number_of_question) {
-        echo "<section class='questionStyle'> <p>" . $questions[$number_of_question]["question_text"] . "</p>";
-        foreach ($questions[$number_of_question]['answers'] as $key => $answer_text) {
+  foreach ($random_numbers as $number_of_question) {
+      echo "<section class='questionStyle'> <p>" . $questions[$number_of_question]["question_text"] . "</p>";
+      foreach ($questions[$number_of_question]['answers'] as $key => $answer_text) {
           echo "<label><input type='radio' name='question[$number_of_question]' value='$key'> $key. $answer_text</label>";
-        }
-        echo "</section>";
       }
-      echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
-    } else {
-      $num_of_answers = 0; //Liczba prawidłowych odpowiedzi
-      $wrong_answers = ""; //złe odpowiedzi, przechowujemy w stringu
+      echo "</section>";
+  }
+  echo "<input type='submit' name='submit' value='Sprawdź' class='submitButton'></form>";
+} else {
+  $num_of_answers = 0; // Liczba prawidłowych odpowiedzi
+  $wrong_answers = ""; // Złe odpowiedzi
 
+  // Połączenie z bazą danych - ponowne
+  $conn = new mysqli("mariadb1011.server457902.nazwa.pl:3306", "server457902_quiz", "root123!A", "server457902_quiz");
+  $conn->set_charset('utf8mb4');
 
-      $conn = new mysqli("localhost", "root", null, "quiz");
-      $sql = "SELECT q.id, a.correct_answer 
-      FROM questions q 
-      JOIN answers a ON q.id = a.question_id";
-      $result = $conn->query($sql);
-      $correct_answers = array();
+  if ($conn->connect_error) {
+      die("Błąd połączenia z bazą danych: " . $conn->connect_error);
+  }
 
-      if ($result) {
-        while ($row = $result->fetch_assoc()) {
-          $correct_answers[$row['id']] = $row['correct_answer'];
-        }
-      }
-      $conn->close();
+  // Pobieranie poprawnych odpowiedzi
+  $sql = "SELECT q.id, a.correct_answer 
+          FROM questions q 
+          JOIN answers a ON q.id = a.question_id";
+  $result = $conn->query($sql);
 
+  if (!$result) {
+      die("Błąd w zapytaniu SQL: " . $conn->error);
+  }
 
+  $correct_answers = [];
+  while ($row = $result->fetch_assoc()) {
+      $correct_answers[$row['id']] = $row['correct_answer'];
+  }
 
-      //This loop checks answer for every single question. If it's incorrect, then question is added to the $wrong_answers string, which is displayed after the end of the quiz
-      if (isset($_POST['question'])) {
-        foreach ($_POST['question'] as $question_id => $question_answer) {
-          if ($question_answer == $correct_answers[$question_id]) {
-            $num_of_answers++;
+  // Sprawdzenie odpowiedzi użytkownika
+  if (isset($_POST['question'])) {
+      foreach ($_POST['question'] as $question_id => $question_answer) {
+          if (isset($correct_answers[$question_id]) && $question_answer == $correct_answers[$question_id]) {
+              $num_of_answers++;
           } else {
-            if (isset($questions[$question_id])) {
               $wrong_answers .= "<section class='questionStyle'>";
               $wrong_answers .= "<p>" . $questions[$question_id]['question_text'] . "</p>";
 
               foreach ($questions[$question_id]['answers'] as $key => $answer_text) {
-                $checked = ($key == $question_answer) ? "checked" : "";
-                $wrong_answers .= "<label><input type='radio' name='question[$question_id]' value='$key' $checked> $key. $answer_text</label>";
+                  $checked = ($key == $question_answer) ? "checked" : "";
+                  $wrong_answers .= "<label><input type='radio' name='question[$question_id]' value='$key' $checked> $key. $answer_text</label>";
               }
 
               $correct_answer_letter = $correct_answers[$question_id];
               $wrong_answers .= "<p class='correctAnswer'>Poprawna odpowiedź: " . $questions[$question_id]['answers'][$correct_answer_letter] . "</p>";
-
               $wrong_answers .= "</section>";
-            } else {
-              $wrong_answers .= "<p>Błąd: Nie znaleziono pytania o ID $question_id.</p>";
-            }
           }
-        }
-      } else {
-        $wrong_answers .= "<p>Błąd: Brak danych z formularza.</p>";
       }
-      // Wylicz procenty
-      $score_percentage = ($num_of_answers / NUM_OF_QUESTIONS) * 100;
+  } else {
+      echo "<p>Błąd: Brak danych z formularza!</p>";
+  }
 
-      $conn = new mysqli("localhost", "root", "", "quiz");
+  // Wylicz procenty
+  $score_percentage = ($num_of_answers / NUM_OF_QUESTIONS) * 100;
 
-      // Check connection
-      if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-      }
+  // Pobranie ID użytkownika z sesji
+  $user_id = $_SESSION['user_id'] ?? 1;
 
-      // Przechowywując user_id w userForm.php w sesji. Możena je teraz pobrać
-      session_start();
-      $user_id = $_SESSION['user_id'] ?? 1; // Replace with actual user ID retrieval logic
-      session_unset();
-      session_destroy();
+  // Zapis wyniku do bazy danych
+  $stmt = $conn->prepare("INSERT INTO results (user_id, userScore) VALUES (?, ?)");
+  $stmt->bind_param("ii", $user_id, $score_percentage);
 
-      $stmt = $conn->prepare("INSERT INTO results (user_id, userScore) VALUES (?, ?)");
-      $stmt->bind_param("ii", $user_id, $score_percentage);
+  if (!$stmt->execute()) {
+      echo "Błąd podczas zapisywania wyniku: " . $stmt->error;
+  }
 
-      // Wykonaj zapytanie
-      if (!$stmt->execute()) {
-        echo "Błąd podczas zapisywania wyniku: " . $stmt->error;
-      }
+  $stmt->close();
+  $conn->close();
 
-      // Close the statement and connection
-      $stmt->close();
-      $conn->close();
+  // Zakończenie sesji po zapisaniu wyniku
+  session_unset();
+  session_destroy();
 
-      echo "<section class='mainContainer'>";
-      echo "<p class='score'>" . (round(num: $score_percentage)) . "%</p>";
+  // Wyświetlenie wyniku
+  echo "<section class='mainContainer'>";
+  echo "<p class='score'>" . round($score_percentage) . "%</p>";
 
-      if ($score_percentage <= 30) { //Displaying appropriate congraatulations message
-        echo "<p class='scoreText'>Niestety, ale nie poszło ci zbyt dobrze. Musisz się jeszcze dużo nauczyć, jeśli planujesz podjąć się pracy programisty.</p>";
-      } elseif ($score_percentage > 30 && $score_percentage <= 60) {
-        echo "<p class='scoreText'>Nieźle, jednak czeka cię jeszcze sporo pracy jeśli chcesz opanować podstawy projektowania stron internetowych.</p>";
-      } elseif ($score_percentage > 60 && $score_percentage <= 90) {
-        echo "<p class='scoreText'>Świetnie ci poszło! Jeśli znasz praktykę równie dobrze jak teorię, nie musisz się zbytnio martwić o egzaminy zawodowe.</p>";
-      } elseif ($score_percentage > 90 && $score_percentage <= 100) {
-        echo "<p class='scoreText'>Gratulacje! Poszło ci praktycznie bezbłędnie. Znaczy to, że teorię masz w zasadzie w małym palcu. Brawo i oby tak dalej!</p>";
-      }
+  if ($score_percentage <= 30) {
+      echo "<p class='scoreText'>Niestety, ale nie poszło ci zbyt dobrze. Musisz się jeszcze dużo nauczyć, jeśli planujesz podjąć się pracy programisty.</p>";
+  } elseif ($score_percentage <= 60) {
+      echo "<p class='scoreText'>Nieźle, jednak czeka cię jeszcze sporo pracy jeśli chcesz opanować podstawy projektowania stron internetowych.</p>";
+  } elseif ($score_percentage <= 90) {
+      echo "<p class='scoreText'>Świetnie ci poszło! Jeśli znasz praktykę równie dobrze jak teorię, nie musisz się zbytnio martwić o egzaminy zawodowe.</p>";
+  } else {
+      echo "<p class='scoreText'>Gratulacje! Poszło ci praktycznie bezbłędnie. Znaczy to, że teorię masz w zasadzie w małym palcu. Brawo i oby tak dalej!</p>";
+  }
 
+  // Wyświetlenie błędnych odpowiedzi
+  if ($wrong_answers != "") {
+      echo "<p class='scoreText'>Popełniłeś błąd w następujących pytaniach:</p>";
+      echo $wrong_answers;
+  }
 
-
-      //Displaying all the incorrect answers. Of course if there were any
-      if ($wrong_answers != "") {
-        echo "<p class='scoreText'>Popełniłeś błąd w następujących pytaniach:</p>";
-        echo $wrong_answers;
-      }
-
-      //Displaying a button taking user back to index.html
-      echo "<div class='buttonContainer'><a href='../index.html' class='submitTwoButton'>Powrót</a></div>";
-      echo "</section>";
-    }
+  // Przycisk powrotu
+  echo "<div class='buttonContainer'><a href='../index.html' class='submitTwoButton'>Powrót</a></div>";
+  echo "</section>";
+}
     ?>
   </main>
 

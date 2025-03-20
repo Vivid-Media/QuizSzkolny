@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+<?php
+session_start();
+ob_start();
+?>
 <html lang="pl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +10,7 @@
     <link rel="stylesheet" href="../css/userformstyle.css">
     <title>Quiz</title>
 </head>
-
 <body>
-
     <header>
         <h2>Witaj w quizie!</h2>
         <style>
@@ -27,8 +27,7 @@
     </header>
     <section class="mainsectionform">
         <section class="logowanie">
-            <form method="post">
-
+            <form method="post" action="">
                 <?php
                 // inicjalizacja zmiennych
                 $imie = "";
@@ -38,18 +37,13 @@
 
                 // sprawdzam czy formularz został wysłany
                 if (isset($_POST['ok'])) {
-
                     $imie = $_POST["imie"];
                     //usuwam spacje z imienia
                     $imieBezSpacji = str_replace([" "], "", $imie);
-
                     $nazwisko = $_POST["nazwisko"];
                     //usuwam spacje z nazwiska
                     $nazwiskoBezSpacji = str_replace([" "], "", $nazwisko);
-
                     $szkola = $_POST["szkola"];
-
-
                     // Walidacja danych
                     if (strlen($imieBezSpacji) < 3) {
                         $blad = "Imię musi mieć co najmniej 3 litery.";
@@ -57,38 +51,34 @@
                         $blad = "Podaj pierwszą litere nazwiska.";
                     } else {
                         // Połączenie z bazą danych
-                        $conn = new mysqli("localhost", "root", "", "quiz");
-
+                        $conn = new mysqli("mariadb1011.server457902.nazwa.pl:3306","server457902_quiz","root123!A", "server457902_quiz");
                         // Sprawdzenie połączenia
                         if ($conn->connect_error) {
                             die("Connection failed: " . $conn->connect_error);
                         }
-
                         // Przygotowane zapytanie SQL
+                            $imieBezSpacji = htmlspecialchars(trim($imie), ENT_QUOTES, 'UTF-8'); //obsługa ataków SQL Injection
+                            $nazwiskoBezSpacji = htmlspecialchars(trim($nazwisko), ENT_QUOTES, 'UTF-8');//obsługa ataków SQL Injection
+                            $szkola = htmlspecialchars(trim($szkola), ENT_QUOTES, 'UTF-8');//obsługa ataków SQL Injection
                         $stmt = $conn->prepare("INSERT INTO user (imie, literaNazwiska, szkola) VALUES (?, ?, ?)");
                         $stmt->bind_param("sss", $imieBezSpacji, $nazwiskoBezSpacji, $szkola);
-
                         // Wykonanie zapytania
                         if ($stmt->execute()) {
                             // Retrieve the last inserted user ID
-                            $user_id = $conn->insert_id;
-                            session_start();
-                            $_SESSION['user_id'] = $user_id;
-                            header("Location: ./quiz.php");
+                        $user_id = $conn->insert_id;
+                        $_SESSION['user_id'] = $user_id;
+                        header("Location: ./quiz.php");
+                        exit();
+                        ob_end_flush();
                         } else {
                             $blad = "Błąd podczas dodawania użytkownika: " . $stmt->error;
                         }
-
                         // Zamykanie funkcji oraz $conn
                         $stmt->close();
                         $conn->close();
                     }
                 }
                 ?>
-
-
-
-
                 <label for="imie">Imię: </label>
                 <input type="text" name="imie" id="imie" value="<?php echo $imie; ?>" required><br>
 

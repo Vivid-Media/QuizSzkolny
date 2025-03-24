@@ -19,7 +19,7 @@
             }
 
             // Zapytanie sql
-            $sql = "SELECT u.id, u.imie, r.user_id, r.userScore FROM user u JOIN results r ON u.id=r.user_id ORDER BY r.userScore DESC";
+            $sql = "SELECT u.id, u.imie, u.literaNazwiska, u.szkola, r.user_id, r.userScore FROM user u JOIN results r ON u.id=r.user_id ORDER BY r.userScore DESC";
 
 
             // wykonaj zapytanie
@@ -30,8 +30,10 @@
                 echo "<table border='1'>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
                             <th>User ID</th>
+                            <th>Name</th>
+                            <th>Surname Letter</th>
+                            <th>School Name</th>
                             <th>Score</th>
                         </tr>";
 
@@ -39,8 +41,10 @@
                 while($row = $res->fetch_assoc()) {
                     echo "<tr>
                             <td>" . $row['id'] . "</td>
-                            <td>" . $row['imie'] . "</td>
                             <td>" . $row['user_id'] . "</td>
+                            <td>" . $row['imie'] . "</td>
+                            <td>" . $row['literaNazwiska'] . "</td>
+                            <td>" . $row['szkola'] . "</td>
                             <td>" . $row['userScore'] . "</td>
                           </tr>";
                 }

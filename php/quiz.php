@@ -40,7 +40,7 @@ error_reporting(E_ALL);
     ini_set('display_errors', 0); // Prevents potential errors from displaying
 
     //polaczenie z bazą
-    $conn = new mysqli("mariadb1011.server457902.nazwa.pl:3306","server457902_quiz","root123!A","server457902_quiz");
+    $conn = new mysqli("localhost","root",null,"quiz");
             
             if ($conn->connect_error) {
               die("Błąd połączenia z bazą danych: " . $conn->connect_error);
@@ -96,7 +96,7 @@ if (!isset($_POST['submit'])) {
   $wrong_answers = ""; // Złe odpowiedzi
 
   // Połączenie z bazą danych - ponowne
-  $conn = new mysqli("mariadb1011.server457902.nazwa.pl:3306", "server457902_quiz", "root123!A", "server457902_quiz");
+  $conn = new mysqli("localhost", "root", null,"quiz");
   $conn->set_charset('utf8mb4');
 
   if ($conn->connect_error) {

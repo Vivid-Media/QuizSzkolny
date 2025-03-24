@@ -51,7 +51,7 @@ ob_start();
                         $blad = "Podaj pierwszą litere nazwiska.";
                     } else {
                         // Połączenie z bazą danych
-                        $conn = new mysqli("mariadb1011.server457902.nazwa.pl:3306","server457902_quiz","root123!A", "server457902_quiz");
+                        $conn = new mysqli("localhost","root",null,"quiz");
                         // Sprawdzenie połączenia
                         if ($conn->connect_error) {
                             die("Connection failed: " . $conn->connect_error);
